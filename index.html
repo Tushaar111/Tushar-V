@@ -1,136 +1,223 @@
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-
-export default function ValentineProposal() {
-  const [opened, setOpened] = useState(false);
-  const [answered, setAnswered] = useState(false);
-  const [redirect, setRedirect] = useState(false);
-  const [noButtonPosition, setNoButtonPosition] = useState({ top: '50%', left: '60%' });
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [yesCount, setYesCount] = useState(1);
-  const audioRef = useRef(null);
-
-  const handleOpenEnvelope = () => setOpened(true);
-  const handleYes = () => {
-    setAnswered(true);
-    setTimeout(() => setRedirect(true), 3000);
-  };
-
-  const handleNoHover = () => {
-    const randomTop = Math.random() * 80 + '%';
-    const randomLeft = Math.random() * 80 + '%';
-    setNoButtonPosition({ top: randomTop, left: randomLeft });
-    setYesCount(prevCount => prevCount + 1);
-  };
-
-  const toggleMusic = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine Proposal</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #ffe4e6;
+      font-family: Arial, sans-serif;
     }
-    setIsPlaying(!isPlaying);
-  };
 
-  if (redirect) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-pink-100">
-        <img 
-          src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" 
-          alt="Cute Valentine Gif" 
-          className="w-64 h-64 rounded-2xl shadow-lg" 
-        />
-        <h1 className="text-3xl font-bold text-pink-600 mt-4">YAY!!!!! 💕</h1>
-      </div>
-    );
-  }
+    .envelope {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      background: white;
+      border: 4px solid #f472b6;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.5s ease-in-out;
+    }
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-pink-50 to-pink-200 overflow-hidden">
-      <audio ref={audioRef} src="https://res.cloudinary.com/dg3wveyd4/video/upload/v1738924318/Blue-Yung-Kai_v2jssq.mp3" loop />
-      <Button 
-        onClick={toggleMusic} 
-        className="bg-red-400 text-white px-4 py-2 rounded-full shadow-md absolute top-4 right-4"
-      >
-        {isPlaying ? 'Pause Music 🔊' : 'Play Music 🎵'}
-      </Button>
+    .envelope.open {
+      transform: translateY(-100px);
+    }
 
-      <AnimatePresence>
-        {!opened ? (
-          <motion.div 
-            className="relative w-72 h-48 bg-white border-4 border-pink-300 rounded-lg shadow-xl cursor-pointer overflow-hidden"
-            onClick={handleOpenEnvelope}
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ scale: 1.2, opacity: 0, transition: { duration: 1 } }}
-            transition={{ type: 'spring', stiffness: 50 }}
-          >
-            <motion.div 
-              className="absolute inset-0 bg-pink-300 rounded-t-lg z-0"
-              initial={{ y: 0 }}
-              animate={{ y: -200 }}
-              transition={{ delay: 0.5, duration: 1, ease: 'easeInOut' }}
-            />
-            <motion.div 
-              className="absolute inset-0 flex items-center justify-center z-10"
-              initial={{ opacity: 1 }}
-              animate={{ opacity: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-            >
-              <span className="text-2xl font-bold text-pink-600">For You 📧</span>
-            </motion.div>
-            <div className="absolute top-2 right-2 w-12 h-12 bg-red-400 rounded-full border-2 border-white shadow-md flex items-center justify-center">
-              <img 
-                src="https://i.imgur.com/3Xx1zJh.png" 
-                alt="Heart by Fingers Stamp" 
-                className="w-10 h-10 rounded-full"
-              />
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div 
-            className="text-center"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 100 }}
-          >
-            <h1 className="text-4xl font-extrabold text-pink-600 mb-8 animate-pulse">
-              Vanshika, will you be my Valentine?
-            </h1>
-            <div className="relative w-full h-40 flex flex-wrap justify-center gap-4">
-              {[...Array(yesCount)].map((_, i) => (
-                <Button 
-                  key={i}
-                  onClick={handleYes} 
-                  className="bg-pink-500 text-white px-6 py-3 rounded-full shadow-lg text-lg hover:scale-110 transition-transform"
-                >
-                  Yes 💖
-                </Button>
-              ))}
-              <Button 
-                onMouseEnter={handleNoHover}
-                style={{ position: 'absolute', ...noButtonPosition }}
-                className="bg-gray-300 text-black px-6 py-3 rounded-full shadow-lg text-lg hover:bg-gray-400"
-              >
-                No 😔
-              </Button>
-            </div>
-            {answered && (
-              <motion.div 
-                className="fixed inset-0 flex justify-center items-center pointer-events-none"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <div className="absolute inset-0 bg-pink-200 opacity-50 animate-pulse"></div>
-                <div className="absolute text-5xl space-y-2 animate-bounce">
-                  {'💕 '.repeat(50)}
-                </div>
-              </motion.div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+    .envelope .flap {
+      position: absolute;
+      width: 100%;
+      height: 50%;
+      background: #f472b6;
+      top: 0;
+      left: 0;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .envelope .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #f472b6;
+    }
+
+    .stamp {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 50px;
+      height: 50px;
+      background: #e11d48;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.8em;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .question {
+      display: none;
+      text-align: center;
+    }
+
+    .question h1 {
+      color: #be185d;
+      font-size: 2em;
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    .buttons button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 1em;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .yes {
+      background-color: #ec4899;
+      color: white;
+    }
+
+    .no {
+      background-color: #d1d5db;
+      color: black;
+      position: absolute;
+    }
+
+    .hearts {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: absolute;
+      color: #f43f5e;
+      font-size: 2em;
+      animation: float 4s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh); opacity: 1; }
+      100% { transform: translateY(-10vh); opacity: 0; }
+    }
+
+    .final-message {
+      display: none;
+      text-align: center;
+    }
+
+    .final-message img {
+      width: 200px;
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bg-music" src="https://res.cloudinary.com/dg3wveyd4/video/upload/v1738924318/Blue-Yung-Kai_v2jssq.mp3" loop></audio>
+  <button onclick="toggleMusic()" style="position: absolute; top: 20px; right: 20px; padding: 10px 20px; background: #e11d48; color: white; border: none; border-radius: 20px; cursor: pointer;">Play Music 🎵</button>
+
+  <div class="envelope" onclick="openEnvelope()">
+    <div class="flap"></div>
+    <div class="content">For You 📧</div>
+    <div class="stamp">❤️</div>
+  </div>
+
+  <div class="question">
+    <h1>Vanshika, will you be my Valentine?</h1>
+    <div class="buttons">
+      <button class="yes" onclick="showHearts()">Yes 💖</button>
+      <button class="no" onmouseover="moveNoButton()">No 😔</button>
     </div>
-  );
-}
+  </div>
+
+  <div class="hearts"></div>
+
+  <div class="final-message">
+    <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Cute Valentine Gif">
+    <h1>YAY!!!!! 💕</h1>
+  </div>
+
+  <script>
+    let isPlaying = false;
+    const music = document.getElementById('bg-music');
+
+    function toggleMusic() {
+      if (isPlaying) {
+        music.pause();
+      } else {
+        music.play();
+      }
+      isPlaying = !isPlaying;
+    }
+
+    function openEnvelope() {
+      document.querySelector('.envelope').style.display = 'none';
+      document.querySelector('.question').style.display = 'block';
+    }
+
+    function moveNoButton() {
+      const noButton = document.querySelector('.no');
+      const newTop = Math.random() * 80 + 'vh';
+      const newLeft = Math.random() * 80 + 'vw';
+      noButton.style.top = newTop;
+      noButton.style.left = newLeft;
+
+      // Add extra "Yes" button
+      const newYes = document.createElement('button');
+      newYes.className = 'yes';
+      newYes.textContent = 'Yes 💖';
+      newYes.onclick = showHearts;
+      document.querySelector('.buttons').appendChild(newYes);
+    }
+
+    function showHearts() {
+      const heartsContainer = document.querySelector('.hearts');
+      heartsContainer.style.display = 'block';
+
+      for (let i = 0; i < 50; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDelay = Math.random() * 2 + 's';
+        heart.textContent = '💖';
+        heartsContainer.appendChild(heart);
+      }
+
+      setTimeout(() => {
+        document.querySelector('.question').style.display = 'none';
+        document.querySelector('.final-message').style.display = 'block';
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
