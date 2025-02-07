@@ -15,7 +15,7 @@
       height: 100vh;
       background-color: #ffe4e6;
       font-family: Arial, sans-serif;
-      overflow: hidden;
+      position: relative;
     }
 
     .envelope {
@@ -32,8 +32,7 @@
     }
 
     .envelope.open {
-      transform: translateY(-100vh);
-      transition: transform 1s ease-in-out;
+      transform: translateY(-100px);
     }
 
     .envelope .flap {
@@ -48,7 +47,7 @@
 
     .envelope .content {
       position: absolute;
-      top: 60%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 1.5em;
@@ -71,6 +70,16 @@
       font-size: 0.8em;
       font-weight: bold;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .stamp.blink {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
     }
 
     .question {
@@ -130,15 +139,23 @@
       100% { transform: translateY(-10vh); opacity: 0; }
     }
 
-    .final-message, .hug-message {
+    .final-message {
       display: none;
       text-align: center;
     }
 
-    .final-message img, .hug-message img {
-      width: 200px;
+    .final-message img {
+      width: 300px;
+      height: 200px;
       border-radius: 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .cute-drawings {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 2em;
     }
   </style>
 </head>
@@ -146,6 +163,10 @@
 
   <audio id="bg-music" src="https://res.cloudinary.com/dg3wveyd4/video/upload/v1738924318/Blue-Yung-Kai_v2jssq.mp3" loop></audio>
   <button onclick="toggleMusic()" style="position: absolute; top: 20px; right: 20px; padding: 10px 20px; background: #e11d48; color: white; border: none; border-radius: 20px; cursor: pointer;">Play Music 🎵</button>
+
+  <div class="cute-drawings">
+    🌸 🐥 🌈 🌻 🍭
+  </div>
 
   <div class="envelope" onclick="openEnvelope()">
     <div class="flap"></div>
@@ -163,13 +184,8 @@
 
   <div class="hearts"></div>
 
-  <div class="hug-message">
-    <img src="https://media.giphy.com/media/l2QDM9Jnim1YVILXa/giphy.gif" alt="Hug Gif">
-    <h1>Aww, a big hug for you! 🤗</h1>
-  </div>
-
   <div class="final-message">
-    <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Cute Valentine Gif">
+    <img id="hug-gif" src="https://media.giphy.com/media/3M4NpbLCTxBqU/giphy.gif" alt="Hug Gif">
     <h1>YAY!!!!! 💕</h1>
   </div>
 
@@ -187,11 +203,11 @@
     }
 
     function openEnvelope() {
-      document.querySelector('.envelope').classList.add('open');
+      document.querySelector('.stamp').classList.add('blink');
       setTimeout(() => {
         document.querySelector('.envelope').style.display = 'none';
         document.querySelector('.question').style.display = 'block';
-      }, 1000);
+      }, 2000);
     }
 
     function moveNoButton() {
@@ -201,6 +217,7 @@
       noButton.style.top = newTop;
       noButton.style.left = newLeft;
 
+      // Add extra "Yes" button
       const newYes = document.createElement('button');
       newYes.className = 'yes';
       newYes.textContent = 'Yes 💖';
@@ -223,13 +240,14 @@
 
       setTimeout(() => {
         document.querySelector('.question').style.display = 'none';
-        document.querySelector('.hug-message').style.display = 'block';
+        const finalMessage = document.querySelector('.final-message');
+        finalMessage.style.display = 'block';
+        document.getElementById('hug-gif').src = 'https://media.giphy.com/media/3M4NpbLCTxBqU/giphy.gif';
+        
+        setTimeout(() => {
+          document.getElementById('hug-gif').src = 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzI4NTJqd2M4NWM0cm85ajBoaWthdGE3cXo5cHduc3Yzb2ZnaXI3YyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8ZgFoK7N5s0ow/giphy.gif';
+        }, 3000);
       }, 2000);
-
-      setTimeout(() => {
-        document.querySelector('.hug-message').style.display = 'none';
-        document.querySelector('.final-message').style.display = 'block';
-      }, 4000);
     }
   </script>
 
