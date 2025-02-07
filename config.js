@@ -1,89 +1,180 @@
-// ============================================
-// 💝 CUSTOMIZE YOUR VALENTINE'S WEBSITE HERE 💝
-// ============================================
-
-const CONFIG = {
-    // Your Valentine's name that will appear in the title
-    // Example: "Jade", "Sarah", "Mike"
-    valentineName: "Jade",
-
-    // The title that appears in the browser tab
-    // You can use emojis! 💝 💖 💗 💓 💞 💕
-    pageTitle: "Will You Be My Valentine? 💝",
-
-    // Floating emojis that appear in the background
-    // Find more emojis at: https://emojipedia.org
-    floatingEmojis: {
-        hearts: ['❤️', '💖', '💝', '💗', '💓'],  // Heart emojis
-        bears: ['🧸', '🐻']                       // Cute bear emojis
-    },
-
-    // Questions and answers
-    // Customize each question and its possible responses
-    questions: {
-        first: {
-            text: "Do you like me?",                                    // First interaction
-            yesBtn: "Yes",                                             // Text for "Yes" button
-            noBtn: "No",                                               // Text for "No" button
-            secretAnswer: "I don't like you, I love you! ❤️"           // Secret hover message
-        },
-        second: {
-            text: "How much do you love me?",                          // For the love meter
-            startText: "This much!",                                   // Text before the percentage
-            nextBtn: "Next ❤️"                                         // Text for the next button
-        },
-        third: {
-            text: "Will you be my Valentine on February 14th, 2025? 🌹", // The big question!
-            yesBtn: "Yes!",                                             // Text for "Yes" button
-            noBtn: "No"                                                 // Text for "No" button
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💝</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #ffafbd, #ffc3a0);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
         }
-    },
 
-    // Love meter messages
-    // They show up depending on how far they slide the meter
-    loveMessages: {
-        extreme: "WOOOOW You love me that much?? 🥰🚀💝",  // Shows when they go past 5000%
-        high: "To infinity and beyond! 🚀💝",              // Shows when they go past 1000%
-        normal: "And beyond! 🥰"                           // Shows when they go past 100%
-    },
+        .envelope-container {
+            text-align: center;
+        }
 
-    // Messages that appear after they say "Yes!"
-    celebration: {
-        title: "Yay! I'm the luckiest person in the world! 🎉💝💖💝💓",
-        message: "Now come get your gift, a big warm hug and a huge kiss!",
-        emojis: "🎁💖🤗💝💋❤️💕"  // These will bounce around
-    },
+        .pre-message {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
 
-    // Color scheme for the website
-    // Use https://colorhunt.co or https://coolors.co to find beautiful color combinations
-    colors: {
-        backgroundStart: "#ffafbd",      // Gradient start (try pastel colors for a soft look)
-        backgroundEnd: "#ffc3a0",        // Gradient end (should complement backgroundStart)
-        buttonBackground: "#ff6b6b",     // Button color (should stand out against the background)
-        buttonHover: "#ff8787",          // Button hover color (slightly lighter than buttonBackground)
-        textColor: "#ff4757"             // Text color (make sure it's readable!)
-    },
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: #fff;
+            border: 2px solid #ff6b6b;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.5s;
+            overflow: hidden;
+        }
 
-    // Animation settings
-    // Adjust these if you want faster/slower animations
-    animations: {
-        floatDuration: "15s",           // How long it takes hearts to float up (10-20s recommended)
-        floatDistance: "50px",          // How far hearts move sideways (30-70px recommended)
-        bounceSpeed: "0.5s",            // Speed of bouncing animations (0.3-0.7s recommended)
-        heartExplosionSize: 1.5         // Size of heart explosion effect (1.2-2.0 recommended)
-    },
+        .envelope:hover {
+            transform: scale(1.05);
+        }
 
-    // Background Music (Optional)
-    // Add your own music URL after getting proper licenses
-    music: {
-        enabled: true,                     // Music feature is enabled
-        autoplay: true,                    // Try to autoplay (note: some browsers may block this)
-        musicUrl: "https://res.cloudinary.com/dncywqfpb/video/upload/v1738399057/music_qrhjvy.mp3", // Music streaming URL
-        startText: "🎵 Play Music",        // Button text to start music
-        stopText: "🔇 Stop Music",         // Button text to stop music
-        volume: 0.5                        // Volume level (0.0 to 1.0)
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: #ff6b6b;
+            border-radius: 15px 15px 0 0;
+            transform-origin: top;
+            transition: transform 0.5s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+
+        .flap::before {
+            content: "💌"; /* Sticker on flap */
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+        }
+
+        .letter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 90%;
+            height: 70%;
+            background: #fff;
+            border: 1px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #ff4757;
+            transition: transform 0.5s 0.5s;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.5rem;
+        }
+
+        .envelope.open .letter {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .floating-emojis span {
+            position: absolute;
+            font-size: 24px;
+            animation: float 15s infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            from { transform: translateY(100vh); }
+            to { transform: translateY(-10vh); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        button {
+            background-color: #ff6b6b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="envelope-container">
+    <div class="pre-message">For You 💌</div>
+    <div class="envelope" onclick="toggleEnvelope()">
+        <div class="flap"></div>
+        <div class="letter">
+            <h2>Will You Be My Valentine, Vanshika? 🌹</h2>
+            <button onclick="celebrate(event)">Yes!</button>
+            <button id="noBtn" onclick="showMultipleYes(event)">No</button>
+        </div>
+    </div>
+</div>
+
+<div class="floating-emojis">
+    <span style="left: 10%; animation-delay: 0s;">❤️</span>
+    <span style="left: 20%; animation-delay: 2s;">💖</span>
+    <span style="left: 30%; animation-delay: 4s;">💝</span>
+    <span style="left: 40%; animation-delay: 1s;">💟</span>
+    <span style="left: 50%; animation-delay: 3s;">💓</span>
+    <span style="left: 60%; animation-delay: 5s;">💖</span>
+    <span style="left: 70%; animation-delay: 0.5s;">🪸</span>
+    <span style="left: 80%; animation-delay: 2.5s;">🐻</span>
+    <span style="left: 90%; animation-delay: 3.5s;">🪸</span>
+</div>
+
+<audio id="loveSong" src="https://res.cloudinary.com/dncywqfpb/video/upload/v1738399057/music_qrhjvy.mp3"></audio>
+
+<script>
+    function toggleEnvelope() {
+        const envelope = document.querySelector('.envelope');
+        envelope.classList.toggle('open');
+        const song = document.getElementById('loveSong');
+        if (envelope.classList.contains('open')) {
+            song.play();
+        } else {
+            song.pause();
+            song.currentTime = 0;
+        }
     }
-};
 
-// Don't modify anything below this line unless you know what you're doing
-window.VALENTINE_CONFIG = CONFIG; 
+    function celebrate(event) {
+        event.stopPropagation();
+        alert('Yay! It is a YES! 🎉💝💖💝');
+        const confetti = document.createElement('div');
+        confetti.innerHTML = '💖💝❤️💓💞💕';
+        confetti.style.position = 'absolute';
+        confetti.style.top = '50%';
+        confetti.style.left = '50%';
+        confetti.style.transform = 'translate(-50%, -50%)';
+        confetti.style.fontSize = '50px';
+        confetti.style.animation = 'explode 1s forwards';
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 1000);
+    }
+
+    function showMultiple
+::contentReference[oaicite:0]{index=0}
+ 
