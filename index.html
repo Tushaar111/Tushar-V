@@ -8,15 +8,9 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="greeting">Happy Valentine's Day, <span id="name"></span>!</h1>
+    <h1 class="greeting">Happy Valentine's Day, <span id="name">Vanshika</span>!</h1>
     <p class="message">Will you be mine forever?</p>
     <button class="button" onclick="window.location.href='https://www.yourlovestory.com';">Say Yes!</button>
   </div>
-
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const name = params.get('name') || "Valentine";
-    document.getElementById('name').textContent = name;
-  </script>
 </body>
 </html>
