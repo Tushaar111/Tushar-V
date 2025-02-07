@@ -1,197 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Delivery for Vanshika! 💌</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --background-color: #ffe6e6;
-            --envelope-color: #ffafbd;
-            --flap-color: #ffc3a0;
-            --inner-envelope-color: #fff;
-            --text-color: #ff4757;
-            --button-color: #ff6b6b;
-            --button-hover-color: #ff8787;
-        }
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--background-color);
-            font-family: 'Poppins', sans-serif;
-        }
+export default function ValentineProposal() {
+  const [opened, setOpened] = useState(false);
+  const [answered, setAnswered] = useState(false);
+  const [redirect, setRedirect] = useState(false);
+  const [noButtonPosition, setNoButtonPosition] = useState({ top: '50%', left: '60%' });
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [yesCount, setYesCount] = useState(1);
+  const audioRef = useRef(null);
 
-        .envelope {
-            position: relative;
-            width: 320px;
-            height: 220px;
-            background: var(--envelope-color);
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.4s ease;
-        }
+  const handleOpenEnvelope = () => setOpened(true);
+  const handleYes = () => {
+    setAnswered(true);
+    setTimeout(() => setRedirect(true), 3000);
+  };
 
-        .envelope:hover {
-            transform: scale(1.05);
-        }
+  const handleNoHover = () => {
+    const randomTop = Math.random() * 80 + '%';
+    const randomLeft = Math.random() * 80 + '%';
+    setNoButtonPosition({ top: randomTop, left: randomLeft });
+    setYesCount(prevCount => prevCount + 1);
+  };
 
-        .flap {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: var(--flap-color);
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            transition: transform 0.6s ease;
-            z-index: 3;
-        }
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
 
-        .envelope.open .flap {
-            transform: translateY(-150%) rotateX(180deg);
-        }
+  if (redirect) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-pink-100">
+        <img 
+          src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" 
+          alt="Cute Valentine Gif" 
+          className="w-64 h-64 rounded-2xl shadow-lg" 
+        />
+        <h1 className="text-3xl font-bold text-pink-600 mt-4">YAY!!!!! 💕</h1>
+      </div>
+    );
+  }
 
-        .inner-envelope {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-            background: var(--inner-envelope-color);
-            border-radius: 5px;
-            z-index: 1;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-pink-50 to-pink-200 overflow-hidden">
+      <audio ref={audioRef} src="https://res.cloudinary.com/dg3wveyd4/video/upload/v1738924318/Blue-Yung-Kai_v2jssq.mp3" loop />
+      <Button 
+        onClick={toggleMusic} 
+        className="bg-red-400 text-white px-4 py-2 rounded-full shadow-md absolute top-4 right-4"
+      >
+        {isPlaying ? 'Pause Music 🔊' : 'Play Music 🎵'}
+      </Button>
 
-        .card {
-            position: absolute;
-            top: 40px;
-            left: 30px;
-            right: 30px;
-            bottom: 40px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            transform: translateY(150%);
-            transition: transform 0.6s ease 0.3s;
-            z-index: 2;
-        }
-
-        .envelope.open .card {
-            transform: translateY(0);
-        }
-
-        .card h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.2em;
-            color: var(--text-color);
-            margin: 0;
-            text-align: center;
-        }
-
-        .card button {
-            margin-top: 20px;
-            background: var(--button-color);
-            border: none;
-            padding: 10px 25px;
-            border-radius: 20px;
-            color: white;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .card button:hover {
-            background: var(--button-hover-color);
-        }
-    </style>
-</head>
-<body>
-    <div class="envelope" id="envelope">
-        <div class="flap"></div>
-        <div class="inner-envelope"></div>
-        <div class="card">
-            <h1>Vanshika, will you be my Valentine? 💕</h1>
-            <button id="yesButton">Yes!</button>
-        </div>
+      <AnimatePresence>
+        {!opened ? (
+          <motion.div 
+            className="relative w-72 h-48 bg-white border-4 border-pink-300 rounded-lg shadow-xl cursor-pointer overflow-hidden"
+            onClick={handleOpenEnvelope}
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ scale: 1.2, opacity: 0, transition: { duration: 1 } }}
+            transition={{ type: 'spring', stiffness: 50 }}
+          >
+            <motion.div 
+              className="absolute inset-0 bg-pink-300 rounded-t-lg z-0"
+              initial={{ y: 0 }}
+              animate={{ y: -200 }}
+              transition={{ delay: 0.5, duration: 1, ease: 'easeInOut' }}
+            />
+            <motion.div 
+              className="absolute inset-0 flex items-center justify-center z-10"
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 0 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+            >
+              <span className="text-2xl font-bold text-pink-600">For You 📧</span>
+            </motion.div>
+            <div className="absolute top-2 right-2 w-12 h-12 bg-red-400 rounded-full border-2 border-white shadow-md flex items-center justify-center">
+              <img 
+                src="https://i.imgur.com/3Xx1zJh.png" 
+                alt="Heart by Fingers Stamp" 
+                className="w-10 h-10 rounded-full"
+              />
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div 
+            className="text-center"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 100 }}
+          >
+            <h1 className="text-4xl font-extrabold text-pink-600 mb-8 animate-pulse">
+              Vanshika, will you be my Valentine?
+            </h1>
+            <div className="relative w-full h-40 flex flex-wrap justify-center gap-4">
+              {[...Array(yesCount)].map((_, i) => (
+                <Button 
+                  key={i}
+                  onClick={handleYes} 
+                  className="bg-pink-500 text-white px-6 py-3 rounded-full shadow-lg text-lg hover:scale-110 transition-transform"
+                >
+                  Yes 💖
+                </Button>
+              ))}
+              <Button 
+                onMouseEnter={handleNoHover}
+                style={{ position: 'absolute', ...noButtonPosition }}
+                className="bg-gray-300 text-black px-6 py-3 rounded-full shadow-lg text-lg hover:bg-gray-400"
+              >
+                No 😔
+              </Button>
+            </div>
+            {answered && (
+              <motion.div 
+                className="fixed inset-0 flex justify-center items-center pointer-events-none"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <div className="absolute inset-0 bg-pink-200 opacity-50 animate-pulse"></div>
+                <div className="absolute text-5xl space-y-2 animate-bounce">
+                  {'💕 '.repeat(50)}
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
-
-    <script>
-        document.getElementById('envelope').addEventListener('click', function() {
-            this.classList.toggle('open');
-        });
-
-        document.getElementById('yesButton').addEventListener('click', function(event) {
-            event.stopPropagation();
-            window.location.href = 'valentine_yes.html';
-        });
-    </script>
-</body>
-</html>
-
-<!-- valentine_yes.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yay, Vanshika! 🎉</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #ffafbd;
-            font-family: 'Poppins', sans-serif;
-            color: #fff;
-            text-align: center;
-            flex-direction: column;
-        }
-
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-
-        p {
-            font-size: 1.5em;
-            margin-bottom: 30px;
-        }
-
-        .gif-container {
-            width: 300px;
-            height: 300px;
-            background: #fff;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .gif-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
-</head>
-<body>
-    <h1>Yay! 😍</h1>
-    <p>I'm the happiest person in the world! Here's a little something for you 🎂💖</p>
-    <div class="gif-container">
-        <img src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif" alt="Happy GIF">
-    </div>
-</body>
-</html>
+  );
+}
