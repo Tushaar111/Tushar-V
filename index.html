@@ -15,7 +15,7 @@
       height: 100vh;
       background-color: #ffe4e6;
       font-family: Arial, sans-serif;
-      position: relative;
+      background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/valentine.png');
     }
 
     .envelope {
@@ -29,9 +29,11 @@
       cursor: pointer;
       overflow: hidden;
       transition: transform 0.5s ease-in-out;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    }
+
+    .envelope.open {
+      transform: translateY(-100vh);
+      transition: transform 1s ease-in-out;
     }
 
     .envelope .flap {
@@ -45,11 +47,13 @@
     }
 
     .envelope .content {
-      position: relative;
-      font-size: 1.8em;
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5em;
       font-weight: bold;
       color: #f472b6;
-      z-index: 1;
     }
 
     .stamp {
@@ -67,17 +71,26 @@
       font-size: 0.8em;
       font-weight: bold;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      animation: blink 1s infinite;
+    }
+
+    .stamp.blink {
+      animation: blink 0.5s alternate 6;
     }
 
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+      from { opacity: 1; }
+      to { opacity: 0.3; }
     }
 
     .question {
       display: none;
       text-align: center;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/paper.png');
+      background-size: cover;
     }
 
     .question h1 {
@@ -184,13 +197,18 @@
     }
 
     function openEnvelope() {
+      const envelope = document.querySelector('.envelope');
       const stamp = document.querySelector('.stamp');
-      stamp.style.animation = 'blink 0.5s 4';
-
+      
+      stamp.classList.add('blink');
+      
       setTimeout(() => {
-        document.querySelector('.envelope').style.display = 'none';
-        document.querySelector('.question').style.display = 'block';
-      }, 2000);
+        envelope.classList.add('open');
+        setTimeout(() => {
+          envelope.style.display = 'none';
+          document.querySelector('.question').style.display = 'block';
+        }, 1000);
+      }, 1500);
     }
 
     function moveNoButton() {
@@ -200,6 +218,7 @@
       noButton.style.top = newTop;
       noButton.style.left = newLeft;
 
+      // Add extra "Yes" button
       const newYes = document.createElement('button');
       newYes.className = 'yes';
       newYes.textContent = 'Yes 💖';
