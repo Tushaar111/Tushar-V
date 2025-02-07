@@ -15,6 +15,7 @@
       height: 100vh;
       background-color: #ffe4e6;
       font-family: Arial, sans-serif;
+      overflow: hidden;
     }
 
     .envelope {
@@ -31,7 +32,8 @@
     }
 
     .envelope.open {
-      transform: translateY(-100px);
+      transform: translateY(-100vh);
+      transition: transform 1s ease-in-out;
     }
 
     .envelope .flap {
@@ -46,7 +48,7 @@
 
     .envelope .content {
       position: absolute;
-      top: 50%;
+      top: 60%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 1.5em;
@@ -128,12 +130,12 @@
       100% { transform: translateY(-10vh); opacity: 0; }
     }
 
-    .final-message {
+    .final-message, .hug-message {
       display: none;
       text-align: center;
     }
 
-    .final-message img {
+    .final-message img, .hug-message img {
       width: 200px;
       border-radius: 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -161,6 +163,11 @@
 
   <div class="hearts"></div>
 
+  <div class="hug-message">
+    <img src="https://media.giphy.com/media/l2QDM9Jnim1YVILXa/giphy.gif" alt="Hug Gif">
+    <h1>Aww, a big hug for you! 🤗</h1>
+  </div>
+
   <div class="final-message">
     <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Cute Valentine Gif">
     <h1>YAY!!!!! 💕</h1>
@@ -180,8 +187,11 @@
     }
 
     function openEnvelope() {
-      document.querySelector('.envelope').style.display = 'none';
-      document.querySelector('.question').style.display = 'block';
+      document.querySelector('.envelope').classList.add('open');
+      setTimeout(() => {
+        document.querySelector('.envelope').style.display = 'none';
+        document.querySelector('.question').style.display = 'block';
+      }, 1000);
     }
 
     function moveNoButton() {
@@ -191,7 +201,6 @@
       noButton.style.top = newTop;
       noButton.style.left = newLeft;
 
-      // Add extra "Yes" button
       const newYes = document.createElement('button');
       newYes.className = 'yes';
       newYes.textContent = 'Yes 💖';
@@ -214,8 +223,13 @@
 
       setTimeout(() => {
         document.querySelector('.question').style.display = 'none';
-        document.querySelector('.final-message').style.display = 'block';
+        document.querySelector('.hug-message').style.display = 'block';
       }, 2000);
+
+      setTimeout(() => {
+        document.querySelector('.hug-message').style.display = 'none';
+        document.querySelector('.final-message').style.display = 'block';
+      }, 4000);
     }
   </script>
 
