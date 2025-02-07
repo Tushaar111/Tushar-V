@@ -3,41 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine? 💝</title>
+    <title>Special Delivery for Vanshika! 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --background-color: #ffe6e6;
+            --envelope-color: #ffafbd;
+            --flap-color: #ffc3a0;
+            --inner-envelope-color: #fff;
+            --text-color: #ff4757;
+            --button-color: #ff6b6b;
+            --button-hover-color: #ff8787;
+        }
+
         body {
             margin: 0;
-            padding: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background: linear-gradient(to bottom right, #ffafbd, #ffc3a0);
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-        }
-
-        .envelope-container {
-            text-align: center;
-        }
-
-        .pre-message {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            animation: fadeIn 2s ease-in-out;
+            background-color: var(--background-color);
+            font-family: 'Poppins', sans-serif;
         }
 
         .envelope {
             position: relative;
             width: 320px;
             height: 220px;
-            background: #fff;
-            border: 2px solid #ff6b6b;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: transform 0.5s;
+            background: var(--envelope-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.4s ease;
         }
 
         .envelope:hover {
@@ -46,135 +44,156 @@
 
         .flap {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 50%;
-            background: #ff6b6b;
-            border-radius: 15px 15px 0 0;
-            transform-origin: top;
-            transition: transform 0.5s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-        }
-
-        .flap::before {
-            content: "💌"; /* Sticker on flap */
+            height: 100%;
+            background: var(--flap-color);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            transition: transform 0.6s ease;
+            z-index: 2;
         }
 
         .envelope.open .flap {
-            transform: rotateX(180deg);
+            transform: translateY(-150%) rotateX(180deg);
         }
 
-        .letter {
+        .inner-envelope {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 90%;
-            height: 70%;
-            background: #fff;
-            border: 1px solid #ff6b6b;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            color: #ff4757;
-            transition: transform 0.5s 0.5s;
-            font-family: 'Brush Script MT', cursive;
-            font-size: 1.5rem;
-        }
-
-        .envelope.open .letter {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .floating-emojis span {
-            position: absolute;
-            font-size: 24px;
-            animation: float 15s infinite;
-            opacity: 0.7;
-        }
-
-        @keyframes float {
-            from { transform: translateY(100vh); }
-            to { transform: translateY(-10vh); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        button {
-            background-color: #ff6b6b;
-            color: white;
-            padding: 10px 20px;
-            border: none;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: var(--inner-envelope-color);
             border-radius: 5px;
+            z-index: 1;
+        }
+
+        .card {
+            position: absolute;
+            top: 30px;
+            left: 20px;
+            right: 20px;
+            bottom: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.6s ease 0.2s;
+        }
+
+        .envelope.open .card {
+            transform: translateY(0);
+        }
+
+        .card h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2em;
+            color: var(--text-color);
+            margin: 0;
+            text-align: center;
+        }
+
+        .card p {
+            color: var(--text-color);
+            margin: 15px 0 20px;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .card button {
+            background: var(--button-color);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            color: white;
+            font-size: 1.1rem;
             cursor: pointer;
-            margin: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .card button:hover {
+            background: var(--button-hover-color);
         }
     </style>
 </head>
 <body>
-
-<div class="envelope-container">
-    <div class="pre-message">For You 💌</div>
-    <div class="envelope" onclick="toggleEnvelope()">
+    <div class="envelope" onclick="openEnvelope()">
         <div class="flap"></div>
-        <div class="letter">
-            <h2>Will You Be My Valentine, Vanshika? 🌹</h2>
-            <button onclick="celebrate(event)">Yes!</button>
-            <button id="noBtn" onclick="showMultipleYes(event)">No</button>
+        <div class="inner-envelope"></div>
+        <div class="card">
+            <h1>Vanshika, will you be my Valentine? 💕</h1>
+            <button onclick="event.stopPropagation(); answerYes()">Yes!</button>
         </div>
     </div>
-</div>
 
-<div class="floating-emojis">
-    <span style="left: 10%; animation-delay: 0s;">❤️</span>
-    <span style="left: 20%; animation-delay: 2s;">💖</span>
-    <span style="left: 30%; animation-delay: 4s;">💝</span>
-    <span style="left: 40%; animation-delay: 1s;">💟</span>
-    <span style="left: 50%; animation-delay: 3s;">💓</span>
-    <span style="left: 60%; animation-delay: 5s;">💖</span>
-    <span style="left: 70%; animation-delay: 0.5s;">🪸</span>
-    <span style="left: 80%; animation-delay: 2.5s;">🐻</span>
-    <span style="left: 90%; animation-delay: 3.5s;">🪸</span>
-</div>
-
-<audio id="loveSong" src="https://res.cloudinary.com/dg3wveyd4/video/upload/v1738924318/Blue-Yung-Kai_v2jssq.mp3"></audio>
-
-<script>
-    function toggleEnvelope() {
-        const envelope = document.querySelector('.envelope');
-        envelope.classList.toggle('open');
-        const song = document.getElementById('loveSong');
-        if (envelope.classList.contains('open')) {
-            song.play();
-        } else {
-            song.pause();
-            song.currentTime = 0;
+    <script>
+        function openEnvelope() {
+            document.querySelector('.envelope').classList.toggle('open');
         }
-    }
 
-    function celebrate(event) {
-        event.stopPropagation();
-        alert('Yay! It is a YES! 🎉💝💖💝');
-        const confetti = document.createElement('div');
-        confetti.innerHTML = '💖💝❤️💓💞💕';
-        confetti.style.position = 'absolute';
-        confetti.style.top = '50%';
-        confetti.style.left = '50%';
-        confetti.style.transform = 'translate(-50%, -50%)';
-        confetti.style.fontSize = '50px';
-        confetti.style.animation = 'explode 1s forwards';
-        document.body.appendChild(confetti);
+        function answerYes() {
+            window.location.href = 'valentine_yes.html';
+        }
+    </script>
+</body>
+</html>
 
-        setTimeout(() => confetti.remove(), 1000);
-    }
+<!-- valentine_yes.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yay, Vanshika! 🎉</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffafbd;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            text-align: center;
+            flex-direction: column;
+        }
 
-    function showMultiple
-::contentReference[oaicite:0]{index=0}
- 
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+
+        .gif-container {
+            width: 300px;
+            height: 300px;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .gif-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <h1>Yay! 😍</h1>
+    <div class="gif-container">
+        <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExamx3aXd3aG1uYTh2dW5tMjF5enBlaGYyd3VseHdqYXhnYjhyMDVmbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ch6BQvE0MWlB6/giphy.gif" alt="Happy GIF">
+    </div>
+</body>
+</html>
