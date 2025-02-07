@@ -15,7 +15,7 @@
       height: 100vh;
       background-color: #ffe4e6;
       font-family: Arial, sans-serif;
-      background-image: url('https://www.transparenttextures.com/patterns/white-wall-3.png');
+      position: relative;
     }
 
     .envelope {
@@ -34,10 +34,6 @@
       justify-content: center;
     }
 
-    .envelope.open {
-      transform: translateY(-100px);
-    }
-
     .envelope .flap {
       position: absolute;
       width: 100%;
@@ -50,10 +46,10 @@
 
     .envelope .content {
       position: relative;
-      font-size: 1.5em;
+      font-size: 1.8em;
       font-weight: bold;
       color: #f472b6;
-      z-index: 2;
+      z-index: 1;
     }
 
     .stamp {
@@ -71,12 +67,12 @@
       font-size: 0.8em;
       font-weight: bold;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      animation: blink 1s infinite alternate;
+      animation: blink 1s infinite;
     }
 
     @keyframes blink {
-      from { opacity: 1; }
-      to { opacity: 0.5; }
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
 
     .question {
@@ -143,8 +139,7 @@
 
     .final-message img {
       width: 300px;
-      height: 200px;
-      border-radius: 10px;
+      border-radius: 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
   </style>
@@ -189,8 +184,13 @@
     }
 
     function openEnvelope() {
-      document.querySelector('.envelope').style.display = 'none';
-      document.querySelector('.question').style.display = 'block';
+      const stamp = document.querySelector('.stamp');
+      stamp.style.animation = 'blink 0.5s 4';
+
+      setTimeout(() => {
+        document.querySelector('.envelope').style.display = 'none';
+        document.querySelector('.question').style.display = 'block';
+      }, 2000);
     }
 
     function moveNoButton() {
@@ -200,7 +200,6 @@
       noButton.style.top = newTop;
       noButton.style.left = newLeft;
 
-      // Add extra "Yes" button
       const newYes = document.createElement('button');
       newYes.className = 'yes';
       newYes.textContent = 'Yes 💖';
