@@ -1,95 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Proposal</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background: url('https://i.postimg.cc/Y0FZpRDg/vof-b-Gk-I8-Kc.jpg') no-repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-        }
-        .container {
-            text-align: center;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 40px;
-            border-radius: 15px;
-            width: 60%;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-        }
-        h1 {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .buttons {
-            margin-top: 20px;
-        }
-        .yes-btn {
-            background-color: #ff007f;
-            color: white;
-            padding: 15px 25px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-        .yes-btn:hover {
-            background-color: #ff66b2;
-        }
-        /* Hearts animation */
-        @keyframes heart {
-            0% { transform: translateY(0) scale(0.5); opacity: 1; }
-            100% { transform: translateY(-200px) scale(1); opacity: 0; }
-        }
-        .heart {
-            position: absolute;
-            animation: heart 2s infinite ease-in-out;
-            font-size: 30px;
-            color: red;
-            z-index: 10;
-        }
-        .heart:nth-child(odd) {
-            animation-duration: 2.5s;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Proposal</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <audio autoplay loop>
-        <source src="https://www.reddit.com/r/popheads/comments/6cuu3i/lauv_i_like_me_better_official_audio/?rdt=52154" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
+  <div class="container">
+    <h1 class="greeting">Happy Valentine's Day, <span id="name"></span>!</h1>
+    <p class="message">Will you be mine forever?</p>
+    <button class="button" onclick="window.location.href='https://www.yourlovestory.com';">Say Yes!</button>
+  </div>
 
-    <div class="container">
-        <h1>Vanshika, will you be my Valentine?</h1>
-        <div class="buttons">
-            <button class="yes-btn" onclick="yesClicked()">Yes</button>
-        </div>
-    </div>
-
-    <script>
-        function yesClicked() {
-            // Show hearts animation
-            for (let i = 0; i < 50; i++) {
-                let heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.style.left = Math.random() * window.innerWidth + 'px';
-                heart.style.animationDelay = Math.random() * 2 + 's';
-                document.body.appendChild(heart);
-            }
-            
-            // Transition to the next page with Stitch
-            setTimeout(function() {
-                window.location.href = "next_page.html";  // Redirect to the next page with Stitch animation
-            }, 3000);  // After hearts animation completes
-        }
-    </script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get('name') || "Valentine";
+    document.getElementById('name').textContent = name;
+  </script>
 </body>
 </html>
