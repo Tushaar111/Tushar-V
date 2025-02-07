@@ -144,7 +144,7 @@
     <span style="left: 90%; animation-delay: 3.5s;">🪸</span>
 </div>
 
-<audio id="loveSong" src="https://res.cloudinary.com/dncywqfpb/video/upload/v1738399057/music_qrhjvy.mp3"></audio>
+<audio id="loveSong" src="https://res.cloudinary.com/dg3wveyd4/video/upload/v1738924318/Blue-Yung-Kai_v2jssq.mp3"></audio>
 
 <script>
     function toggleEnvelope() {
